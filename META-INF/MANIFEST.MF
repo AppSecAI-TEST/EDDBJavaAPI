@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ua.gwm.elite_dangerous.eddb_java_api.EDDBJavaAPI
+
