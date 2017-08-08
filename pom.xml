@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ua.gwm.ed</groupId>
+    <groupId>ua.gwm</groupId>
     <artifactId>eddb_java_api</artifactId>
     <version>1.0</version>
 
