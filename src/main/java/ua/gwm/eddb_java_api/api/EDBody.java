@@ -209,7 +209,7 @@ public class EDBody {
                 double belt_moon_masses = belt_moon_masses_element.isJsonNull() ?
                         -1. :
                         belt_moon_masses_element.getAsJsonPrimitive().getAsDouble();
-                List<EDRing> rings = new ArrayList<EDRing>();
+                Set<EDRing> rings = new HashSet<EDRing>();
                 JsonArray rings_array = body_object.get("rings").getAsJsonArray();
                 for (JsonElement ring_element : rings_array) {
                     JsonObject ring_object = ring_element.getAsJsonObject();
@@ -252,8 +252,8 @@ public class EDBody {
                     rings.add(new EDRing(ring_ring_id, ring_created_at, ring_updated_at, ring_name, ring_semi_major_axis,
                             ring_ring_mass, ring_ring_inner_radius, ring_ring_outer_radius, ring_ring_type));
                 }
-                Map<EDAtmosphereComponentType, Double> atmosphere_composition =
-                        new HashMap<EDAtmosphereComponentType, Double>();
+                EnumMap<EDAtmosphereComponentType, Double> atmosphere_composition =
+                        new EnumMap<EDAtmosphereComponentType, Double>(EDAtmosphereComponentType.class);
                 JsonArray atmosphere_composition_array = body_object.getAsJsonArray("atmosphere_composition");
                 for (JsonElement atmosphere_composition_element : atmosphere_composition_array) {
                     JsonObject atmosphere_composition_object = atmosphere_composition_element.getAsJsonObject();
@@ -261,8 +261,8 @@ public class EDBody {
                             byName(atmosphere_composition_object.getAsJsonPrimitive("atmosphere_component_name").getAsString()),
                             atmosphere_composition_object.getAsJsonPrimitive("share").getAsDouble());
                 }
-                Map<EDSolidComponentType, Double> solid_composition =
-                        new HashMap<EDSolidComponentType, Double>();
+                EnumMap<EDSolidComponentType, Double> solid_composition =
+                        new EnumMap<EDSolidComponentType, Double>(EDSolidComponentType.class);
                 JsonArray solid_composition_array = body_object.getAsJsonArray("solid_composition");
                 for (JsonElement solid_composition_element : solid_composition_array) {
                     JsonObject solid_composition_object = solid_composition_element.getAsJsonObject();
@@ -270,8 +270,8 @@ public class EDBody {
                             byName(solid_composition_object.getAsJsonPrimitive("solid_component_name").getAsString()),
                             solid_composition_object.getAsJsonPrimitive("share").getAsDouble());
                 }
-                Map<EDMaterialType, Double> materials =
-                        new HashMap<EDMaterialType, Double>();
+                EnumMap<EDMaterialType, Double> materials =
+                        new EnumMap<EDMaterialType, Double>(EDMaterialType.class);
                 JsonArray materials_array = body_object.getAsJsonArray("materials");
                 for (JsonElement material_element : materials_array) {
                     JsonObject material_object = material_element.getAsJsonObject();
@@ -345,7 +345,7 @@ public class EDBody {
     private final Object ring_mass;
     private final Object ring_inner_radius;
     private final Object ring_outer_radius;*/
-    private final List<EDRing> rings;
+    private final Set<EDRing> rings;
     private final Map<EDAtmosphereComponentType, Double> atmosphere_composition;
     private final Map<EDSolidComponentType, Double> solid_composition;
     private final Map<EDMaterialType, Double> materials;
@@ -363,7 +363,7 @@ public class EDBody {
                   double orbital_inclination, double arg_of_periapsis, double rotational_period,
                   boolean is_rotational_period_tidally_locked, double axis_tilt, int eg_id,
                   double belt_moon_masses, /*Object ring_type, Object ring_mass,
-                  Object ring_inner_radius, Object ring_outer_radius,*/ List<EDRing> rings,
+                  Object ring_inner_radius, Object ring_outer_radius,*/ Set<EDRing> rings,
                   Map<EDAtmosphereComponentType, Double> atmosphere_composition,
                   Map<EDSolidComponentType, Double> solid_composition,
                   Map<EDMaterialType, Double> materials, boolean is_landable) {
@@ -584,7 +584,7 @@ public class EDBody {
         return ring_outer_radius;
     }*/
 
-    public List<EDRing> getRings() {
+    public Set<EDRing> getRings() {
         return rings;
     }
 

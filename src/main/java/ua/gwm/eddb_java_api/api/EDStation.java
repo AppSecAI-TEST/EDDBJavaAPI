@@ -104,22 +104,22 @@ public class EDStation {
                         boolean has_shipyard = station_object.get("has_shipyard").getAsJsonPrimitive().getAsBoolean();
                         boolean has_docking = station_object.get("has_docking").getAsJsonPrimitive().getAsBoolean();
                         boolean has_commodities = station_object.get("has_commodities").getAsJsonPrimitive().getAsBoolean();
-                        List<String> import_commodities = StreamSupport.stream(
+                        Set<String> import_commodities = StreamSupport.stream(
                                 station_object.get("import_commodities").getAsJsonArray().spliterator(), false).
                                 map(commodity_element -> commodity_element.getAsJsonPrimitive().getAsString()).
-                                collect(Collectors.toList());
-                        List<String> export_commodities = StreamSupport.stream(
+                                collect(Collectors.toSet());
+                        Set<String> export_commodities = StreamSupport.stream(
                                 station_object.get("export_commodities").getAsJsonArray().spliterator(), false).
                                 map(commodity_element -> commodity_element.getAsJsonPrimitive().getAsString()).
-                                collect(Collectors.toList());
-                        List<String> prohibited_commodities = StreamSupport.stream(
+                                collect(Collectors.toSet());
+                        Set<String> prohibited_commodities = StreamSupport.stream(
                                 station_object.get("prohibited_commodities").getAsJsonArray().spliterator(), false).
                                 map(commodity_element -> commodity_element.getAsJsonPrimitive().getAsString()).
-                                collect(Collectors.toList());
-                        List<EDEconomy> economies = StreamSupport.stream(
+                                collect(Collectors.toSet());
+                        EnumSet<EDEconomy> economies = StreamSupport.stream(
                                 station_object.get("economies").getAsJsonArray().spliterator(), false)
                                 .map(economy_element -> EDEconomy.byName(economy_element.getAsJsonPrimitive().getAsString())).
-                                        collect(Collectors.toList());
+                                        collect(Collectors.toCollection(() -> EnumSet.noneOf(EDEconomy.class)));
                         JsonElement shipyard_updated_at_element = station_object.get("shipyard_updated_at");
                         long shipyard_updated_at = shipyard_updated_at_element.isJsonNull() ? -1 :
                                 shipyard_updated_at_element.getAsJsonPrimitive().getAsLong();
@@ -130,14 +130,14 @@ public class EDStation {
                         long market_updated_at = market_updated_at_element.isJsonNull() ? -1 :
                                 market_updated_at_element.getAsJsonPrimitive().getAsLong();
                         boolean is_planetary = station_object.get("is_planetary").getAsJsonPrimitive().getAsBoolean();
-                        List<EDShip> selling_ships = StreamSupport.stream(
+                        EnumSet<EDShip> selling_ships = StreamSupport.stream(
                                 station_object.get("selling_ships").getAsJsonArray().spliterator(), false).
                                 map(selling_ship_element -> EDShip.byName(selling_ship_element.getAsJsonPrimitive().getAsString())).
-                                collect(Collectors.toList());
-                        List<Integer> selling_modules = StreamSupport.stream(
+                                collect(Collectors.toCollection(() -> EnumSet.noneOf(EDShip.class)));
+                        Set<Integer> selling_modules = StreamSupport.stream(
                                 station_object.get("selling_modules").getAsJsonArray().spliterator(), false).
                                 map(module_element -> module_element.getAsJsonPrimitive().getAsInt()).
-                                collect(Collectors.toList());
+                                collect(Collectors.toSet());
                         JsonElement settlement_size_element = station_object.get("settlement_size");
                         EDSettlementSize settlement_size = settlement_size_element.isJsonNull() ?
                                 EDSettlementSize.UNKNOWN :
@@ -188,16 +188,16 @@ public class EDStation {
     private final boolean has_shipyard;
     private final boolean has_docking;
     private final boolean has_commodities;
-    private final List<String> import_commodities;
-    private final List<String> export_commodities;
-    private final List<String> prohibited_commodities;
-    private final List<EDEconomy> economies;
+    private final Set<String> import_commodities;
+    private final Set<String> export_commodities;
+    private final Set<String> prohibited_commodities;
+    private final Set<EDEconomy> economies;
     private final long shipyard_updated_at;
     private final long outfitting_updated_at;
     private final long market_updated_at;
     private final boolean is_planetary;
-    private final List<EDShip> selling_ships;
-    private final List<Integer> selling_modules;
+    private final Set<EDShip> selling_ships;
+    private final Set<Integer> selling_modules;
     private final EDSettlementSize settlement_size;
     private final EDSettlementSecurity settlement_security;
     private final int body_id;
@@ -207,10 +207,10 @@ public class EDStation {
                      int distance_to_star, EDGovernment government, EDAllegiance allegiance, EDState state,
                      EDStationType type, boolean has_blackmarket, boolean has_market, boolean has_refuel, boolean has_repair,
                      boolean has_rearm, boolean has_outfitting, boolean has_shipyard, boolean has_docking,
-                     boolean has_commodities, List<String> import_commodities, List<String> export_commodities,
-                     List<String> prohibited_commodities, List<EDEconomy> economies, long shipyard_updated_at,
-                     long outfitting_updated_at, long market_updated_at, boolean is_planetary, List<EDShip> selling_ships,
-                     List<Integer> selling_modules, EDSettlementSize settlement_size,
+                     boolean has_commodities, Set<String> import_commodities, Set<String> export_commodities,
+                     Set<String> prohibited_commodities, Set<EDEconomy> economies, long shipyard_updated_at,
+                     long outfitting_updated_at, long market_updated_at, boolean is_planetary, Set<EDShip> selling_ships,
+                     Set<Integer> selling_modules, EDSettlementSize settlement_size,
                      EDSettlementSecurity settlement_security, int body_id, int controlling_minor_faction_id) {
         this.id = id;
         this.name = name;
@@ -323,19 +323,19 @@ public class EDStation {
         return has_commodities;
     }
 
-    public List<String> getImportCommodities() {
+    public Set<String> getImportCommodities() {
         return import_commodities;
     }
 
-    public List<String> getExportCommodities() {
+    public Set<String> getExportCommodities() {
         return export_commodities;
     }
 
-    public List<String> getProhibitedCommodities() {
+    public Set<String> getProhibitedCommodities() {
         return prohibited_commodities;
     }
 
-    public List<EDEconomy> getEconomies() {
+    public Set<EDEconomy> getEconomies() {
         return economies;
     }
 
@@ -355,11 +355,11 @@ public class EDStation {
         return is_planetary;
     }
 
-    public List<EDShip> getSellingShips() {
+    public Set<EDShip> getSellingShips() {
         return selling_ships;
     }
 
-    public List<Integer> getSellingModules() {
+    public Set<Integer> getSellingModules() {
         return selling_modules;
     }
 

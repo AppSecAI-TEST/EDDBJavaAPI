@@ -112,7 +112,7 @@ public class EDPopulatedSystem {
                         EDReserveType reserve_type = EDReserveType.byName(
                                 reserve_type_element.isJsonNull() ? null : reserve_type_element.getAsJsonPrimitive().getAsString());
                         JsonArray minor_faction_presences_array = populated_system_object.get("minor_faction_presences").getAsJsonArray();
-                        List<EDSystemFaction> minor_faction_presences = new ArrayList<EDSystemFaction>();
+                        Set<EDSystemFaction> minor_faction_presences = new HashSet<EDSystemFaction>();
                         for (JsonElement minor_faction_element : minor_faction_presences_array) {
                             JsonElement minor_faction_id_element = minor_faction_element.getAsJsonObject().get("minor_faction_id");
                             int minor_faction_id = minor_faction_id_element.isJsonNull() ? -1 : minor_faction_id_element.getAsJsonPrimitive().getAsInt();
@@ -167,13 +167,13 @@ public class EDPopulatedSystem {
     private final String simbad_ref;
     private final EDSystemFaction controlling_minor_faction;
     private final EDReserveType reserve_type;
-    private final List<EDSystemFaction> minor_faction_presences;
+    private final Set<EDSystemFaction> minor_faction_presences;
 
     public EDPopulatedSystem(int id, int edsm_id, String name, Location location, long population, boolean is_populated,
                              EDGovernment government, EDAllegiance allegiance, EDState state, EDSecurity security,
                              EDEconomy primary_economy, EDPower power, EDPowerState power_state, boolean needs_permit,
                              long updated_at, String simbad_ref, EDSystemFaction controlling_minor_faction,
-                             EDReserveType reserve_type, List<EDSystemFaction> minor_faction_presences) {
+                             EDReserveType reserve_type, Set<EDSystemFaction> minor_faction_presences) {
         this.id = id;
         this.edsm_id = edsm_id;
         this.name = name;
@@ -267,7 +267,7 @@ public class EDPopulatedSystem {
         return reserve_type;
     }
 
-    public List<EDSystemFaction> getMinorFactionPresences() {
+    public Set<EDSystemFaction> getMinorFactionPresences() {
         return minor_faction_presences;
     }
 
